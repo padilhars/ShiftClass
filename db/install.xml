@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="theme/shiftclass/db" VERSION="20250121" COMMENT="XMLDB file for ShiftClass theme"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="theme_shiftclass_profiles" COMMENT="Stores visual profiles for ShiftClass theme">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" COMMENT="Profile name"/>
+        <FIELD NAME="primarycolor" TYPE="char" LENGTH="7" NOTNULL="true" DEFAULT="#0f6cbf" COMMENT="Primary color in hex format"/>
+        <FIELD NAME="secondarycolor" TYPE="char" LENGTH="7" NOTNULL="true" DEFAULT="#6c757d" COMMENT="Secondary color in hex format"/>
+        <FIELD NAME="backgroundcolor" TYPE="char" LENGTH="7" NOTNULL="true" DEFAULT="#ffffff" COMMENT="Background color in hex format"/>
+        <FIELD NAME="defaultheaderimage" TYPE="text" NOTNULL="false" COMMENT="Default header image URL or path"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" COMMENT="Time when profile was created"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" COMMENT="Time when profile was last modified"/>
+        <FIELD NAME="usermodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" COMMENT="User who last modified the profile"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="usermodified" TYPE="foreign" FIELDS="usermodified" REFTABLE="user" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="name" UNIQUE="true" FIELDS="name" COMMENT="Unique profile name"/>
+        <INDEX NAME="timecreated" UNIQUE="false" FIELDS="timecreated"/>
+      </INDEXES>
+    </TABLE>
+    
+    <TABLE NAME="theme_shiftclass_course_profiles" COMMENT="Associates courses with visual profiles">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" COMMENT="Course ID"/>
+        <FIELD NAME="profileid" TYPE="int" LENGTH="10" NOTNULL="true" COMMENT="Profile ID"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" COMMENT="Time when association was created"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" COMMENT="Time when association was last modified"/>
+        <FIELD NAME="usermodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" COMMENT="User who last modified the association"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="courseid" TYPE="foreign" FIELDS="courseid" REFTABLE="course" REFFIELDS="id"/>
+        <KEY NAME="profileid" TYPE="foreign" FIELDS="profileid" REFTABLE="theme_shiftclass_profiles" REFFIELDS="id"/>
+        <KEY NAME="usermodified" TYPE="foreign" FIELDS="usermodified" REFTABLE="user" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="courseid-profileid" UNIQUE="true" FIELDS="courseid, profileid" COMMENT="Unique course-profile association"/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>
