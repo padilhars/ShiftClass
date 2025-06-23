@@ -34,10 +34,17 @@ function theme_shiftclass_get_main_scss_content($theme) {
     global $CFG;
 
     $scss = '';
-    $filename = !empty($theme->settings->preset) ? $theme->settings->preset : null;
+    $filename = !empty($theme->settings->preset) ? $theme->settings->preset : 'default.scss';
     $fs = get_file_storage();
 
     $context = context_system::instance();
+    
+    // Debug logging
+    if (!empty($CFG->debugdeveloper)) {
+        error_log('ShiftClass: Loading preset - ' . $filename);
+    }
+    
+    // Load the preset file
     if ($filename == 'default.scss') {
         $scss .= file_get_contents($CFG->dirroot . '/theme/boost/scss/preset/default.scss');
     } else if ($filename == 'plain.scss') {
@@ -49,11 +56,16 @@ function theme_shiftclass_get_main_scss_content($theme) {
         $scss .= file_get_contents($CFG->dirroot . '/theme/boost/scss/preset/default.scss');
     }
 
-    // Include core.scss
-    $scss .= file_get_contents($CFG->dirroot . '/theme/shiftclass/scss/core.scss');
+    // Include ShiftClass SCSS files
+    $corefile = $CFG->dirroot . '/theme/shiftclass/scss/core.scss';
+    if (file_exists($corefile)) {
+        $scss .= "\n" . file_get_contents($corefile);
+    }
 
-    // Include custom.scss
-    $scss .= file_get_contents($CFG->dirroot . '/theme/shiftclass/scss/custom.scss');
+    $customfile = $CFG->dirroot . '/theme/shiftclass/scss/custom.scss';
+    if (file_exists($customfile)) {
+        $scss .= "\n" . file_get_contents($customfile);
+    }
 
     return $scss;
 }
@@ -68,31 +80,60 @@ function theme_shiftclass_get_pre_scss($theme) {
     global $CFG;
 
     $scss = '';
+    
+    // 1. PRIMEIRO: Definir valores padrão para variáveis SCSS
+    $scss .= '$primary: #0f6cbf !default;' . "\n";
+    $scss .= '$secondary: #6c757d !default;' . "\n";
+    $scss .= '$white: #ffffff !default;' . "\n";
+    $scss .= '$black: #000000 !default;' . "\n";
+    $scss .= '$gray-100: #f8f9fa !default;' . "\n";
+    $scss .= '$gray-300: #dee2e6 !default;' . "\n";
+    $scss .= '$gray-600: #6c757d !default;' . "\n";
+    $scss .= '$gray-900: #212529 !default;' . "\n";
+    $scss .= '$yellow: #ffc107 !default;' . "\n";
+    $scss .= '$spacer: 1rem !default;' . "\n";
+    $scss .= '$font-size-base: 1rem !default;' . "\n";
+    $scss .= '$h2-font-size: 2rem !default;' . "\n";
+    $scss .= '$h5-font-size: 1.25rem !default;' . "\n";
+    $scss .= '$h6-font-size: 1rem !default;' . "\n";
+    $scss .= '$font-weight-bold: 700 !default;' . "\n";
+    $scss .= '$font-weight-semibold: 600 !default;' . "\n";
+    $scss .= '$font-weight-medium: 500 !default;' . "\n\n";
+    
+    // 2. SEGUNDO: Sobrescrever com valores de configuração
     $configurable = [
         // Config key => [variableName, ...].
         'brandcolor' => ['primary'],
     ];
 
-    // Prepend variables first.
     foreach ($configurable as $configkey => $targets) {
         $value = isset($theme->settings->{$configkey}) ? $theme->settings->{$configkey} : null;
         if (empty($value)) {
             continue;
         }
+        
+        // Debug logging
+        if (!empty($CFG->debugdeveloper)) {
+            error_log('ShiftClass: Setting ' . $configkey . ' = ' . $value);
+        }
+        
         array_map(function($target) use (&$scss, $value) {
             $scss .= '$' . $target . ': ' . $value . ";\n";
         }, (array) $targets);
     }
-
-    // Prepend pre.scss.
+    
+    // 3. TERCEIRO: Adicionar SCSS customizado do admin (se houver)
     if (!empty($theme->settings->scsspre)) {
-        $scss .= $theme->settings->scsspre;
+        $scss .= "\n" . $theme->settings->scsspre . "\n";
     }
-
-    // Include pre.scss file
-    $prescss = file_get_contents($CFG->dirroot . '/theme/shiftclass/scss/pre.scss');
-    if ($prescss) {
-        $scss .= $prescss;
+    
+    // 4. QUARTO: Incluir arquivo pre.scss
+    $prescssfile = $CFG->dirroot . '/theme/shiftclass/scss/pre.scss';
+    if (file_exists($prescssfile)) {
+        $prescss = file_get_contents($prescssfile);
+        if ($prescss) {
+            $scss .= "\n" . $prescss;
+        }
     }
 
     return $scss;
@@ -110,14 +151,22 @@ function theme_shiftclass_get_extra_scss($theme) {
     $scss = '';
     
     // Include post.scss file
-    $postscss = file_get_contents($CFG->dirroot . '/theme/shiftclass/scss/post.scss');
-    if ($postscss) {
-        $scss .= $postscss;
+    $postscssfile = $CFG->dirroot . '/theme/shiftclass/scss/post.scss';
+    if (file_exists($postscssfile)) {
+        $postscss = file_get_contents($postscssfile);
+        if ($postscss) {
+            $scss .= $postscss;
+        }
     }
     
     // Add any custom SCSS from theme settings
     if (!empty($theme->settings->scss)) {
-        $scss .= $theme->settings->scss;
+        $scss .= "\n" . $theme->settings->scss;
+    }
+    
+    // Debug logging
+    if (!empty($CFG->debugdeveloper)) {
+        error_log('ShiftClass: Extra SCSS loaded - ' . strlen($scss) . ' bytes');
     }
     
     return $scss;
