@@ -28,6 +28,14 @@
     --shiftclass-secondary: #{$secondary};
     --shiftclass-background: #{$white};
     
+    // Create darker versions for hover states
+    --shiftclass-primary-dark: #{darken($primary, 10%)};
+    --shiftclass-secondary-dark: #{darken($secondary, 10%)};
+    --shiftclass-primary-darker: #{darken($primary, 15%)};
+    
+    // RGB values for transparency effects
+    --shiftclass-primary-rgb: #{red($primary)}, #{green($primary)}, #{blue($primary)};
+    
     // Additional theme variables
     --shiftclass-text-primary: #{$gray-900};
     --shiftclass-text-secondary: #{$gray-600};
@@ -64,8 +72,8 @@
         
         &:hover,
         &:focus {
-            background-color: darken(var(--shiftclass-primary), 10%);
-            border-color: darken(var(--shiftclass-primary), 10%);
+            background-color: var(--shiftclass-primary-dark);
+            border-color: var(--shiftclass-primary-dark);
         }
     }
     
@@ -75,8 +83,8 @@
         
         &:hover,
         &:focus {
-            background-color: darken(var(--shiftclass-secondary), 10%);
-            border-color: darken(var(--shiftclass-secondary), 10%);
+            background-color: var(--shiftclass-secondary-dark);
+            border-color: var(--shiftclass-secondary-dark);
         }
     }
     
@@ -92,7 +100,7 @@
         
         &:hover,
         &:focus {
-            color: darken(var(--shiftclass-primary), 15%);
+            color: var(--shiftclass-primary-darker);
         }
     }
 }
