@@ -73,7 +73,7 @@ if ($ADMIN->fulltree) {
 
     $settings->add($page);
 
-    // Visual Profiles tab (stub for Phase 2)
+    // Visual Profiles tab
     $page = new admin_settingpage('theme_shiftclass_profiles', get_string('visualprofiles', 'theme_shiftclass'));
     
     // Information about visual profiles
@@ -82,11 +82,23 @@ if ($ADMIN->fulltree) {
         get_string('visualprofilesinfo_desc', 'theme_shiftclass'));
     $page->add($setting);
     
-    // Placeholder for profile management link (to be implemented in Phase 2)
-    $setting = new admin_setting_heading('theme_shiftclass/manageprofiles', 
-        get_string('manageprofiles', 'theme_shiftclass'),
-        get_string('manageprofiles_desc', 'theme_shiftclass'));
+    // Link to profile management page
+    $profilesurl = new moodle_url('/theme/shiftclass/manage_profiles.php');
+    $link = html_writer::link($profilesurl, get_string('manageprofiles', 'theme_shiftclass'), 
+        ['class' => 'btn btn-primary']);
+    $setting = new admin_setting_heading('theme_shiftclass/manageprofileslink', '', 
+        html_writer::div($link, 'text-center mt-3'));
     $page->add($setting);
     
     $settings->add($page);
+}
+
+// Add external page for profile management
+if ($hassiteconfig) {
+    $ADMIN->add('themes', new admin_externalpage(
+        'theme_shiftclass_profiles',
+        get_string('manageprofiles', 'theme_shiftclass'),
+        new moodle_url('/theme/shiftclass/manage_profiles.php'),
+        'theme/shiftclass:manageprofiles'
+    ));
 }
