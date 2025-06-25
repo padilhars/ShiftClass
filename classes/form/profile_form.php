@@ -75,7 +75,7 @@ class profile_form extends moodleform {
         $mform->addHelpButton('defaultheaderimage', 'defaultheaderimage', 'theme_shiftclass');
         
         // Live preview section
-        $mform->addElement('html', '<div class="form-group row">');
+        $mform->addElement('html', '<div class="mb-3 row">');
         $mform->addElement('html', '<div class="col-md-3">' . get_string('preview', 'theme_shiftclass') . '</div>');
         $mform->addElement('html', '<div class="col-md-9">');
         $mform->addElement('html', '<div id="profile-preview" class="profile-preview-container">');
@@ -85,7 +85,7 @@ class profile_form extends moodleform {
         $mform->addElement('html', '</div>');
         
         // WCAG contrast validation info
-        $mform->addElement('html', '<div class="form-group row">');
+        $mform->addElement('html', '<div class="mb-3 row">');
         $mform->addElement('html', '<div class="col-md-3"></div>');
         $mform->addElement('html', '<div class="col-md-9">');
         $mform->addElement('html', '<div id="contrast-validation" class="alert alert-info">');
@@ -115,7 +115,7 @@ class profile_form extends moodleform {
      * @param string $default Default color
      */
     private function add_color_field($mform, $name, $label, $default) {
-        $mform->addElement('html', '<div class="form-group row fitem">');
+        $mform->addElement('html', '<div class="mb-3 row fitem">');
         $mform->addElement('html', '<div class="col-md-3">' . $label . '</div>');
         $mform->addElement('html', '<div class="col-md-9">');
         $mform->addElement('html', '<div class="color-input-group">');
@@ -181,83 +181,7 @@ class profile_form extends moodleform {
      */
     private function add_javascript() {
         global $PAGE;
-        
-        $js = "
-        <script>
-        (function() {
-            // Initialize color synchronization
-            document.querySelectorAll('.color-picker').forEach(function(picker) {
-                var targetName = picker.getAttribute('data-target');
-                var textInput = document.querySelector('input[name=\"' + targetName + '\"]');
-                var preview = picker.nextElementSibling;
-                
-                // Sync picker to text input
-                picker.addEventListener('input', function() {
-                    textInput.value = picker.value.toUpperCase();
-                    preview.style.backgroundColor = picker.value;
-                    updatePreview();
-                    validateContrast();
-                });
-                
-                // Sync text input to picker
-                textInput.addEventListener('input', function() {
-                    var value = textInput.value;
-                    if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
-                        picker.value = value;
-                        preview.style.backgroundColor = value;
-                        updatePreview();
-                        validateContrast();
-                    }
-                });
-            });
-            
-            // Update live preview
-            function updatePreview() {
-                var preview = document.getElementById('profile-preview');
-                var primary = document.querySelector('input[name=\"primarycolor\"]').value;
-                var secondary = document.querySelector('input[name=\"secondarycolor\"]').value;
-                var background = document.querySelector('input[name=\"backgroundcolor\"]').value;
-                
-                preview.style.setProperty('--preview-primary', primary);
-                preview.style.setProperty('--preview-secondary', secondary);
-                preview.style.setProperty('--preview-background', background);
-            }
-            
-            // Validate WCAG contrast
-            function validateContrast() {
-                var primary = document.querySelector('input[name=\"primarycolor\"]').value;
-                var background = document.querySelector('input[name=\"backgroundcolor\"]').value;
-                var validation = document.getElementById('contrast-validation');
-                
-                // Simple contrast check (full implementation would use the PHP method)
-                var ratio = calculateContrastRatio(primary, background);
-                
-                if (ratio >= 4.5) {
-                    validation.className = 'alert alert-success';
-                    validation.innerHTML = '<i class=\"fa fa-check-circle\"></i> ' + M.util.get_string('contrastpass', 'theme_shiftclass');
-                } else if (ratio >= 3) {
-                    validation.className = 'alert alert-warning';
-                    validation.innerHTML = '<i class=\"fa fa-exclamation-triangle\"></i> ' + M.util.get_string('contrastwarning', 'theme_shiftclass');
-                } else {
-                    validation.className = 'alert alert-danger';
-                    validation.innerHTML = '<i class=\"fa fa-times-circle\"></i> ' + M.util.get_string('contrastfail', 'theme_shiftclass');
-                }
-            }
-            
-            // Simple contrast ratio calculation
-            function calculateContrastRatio(color1, color2) {
-                // This is a simplified version - full implementation would match PHP
-                return 4.5; // Placeholder
-            }
-            
-            // Initialize preview
-            updatePreview();
-            validateContrast();
-        })();
-        </script>
-        ";
-        
-        $PAGE->requires->js_init_code($js);
+        $PAGE->requires->js_call_amd('theme_shiftclass/profile_form', 'init');
     }
     
     /**

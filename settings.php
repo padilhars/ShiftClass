@@ -94,6 +94,7 @@ if ($ADMIN->fulltree) {
 }
 
 // Add external page for profile management
+// Add external page for profile management
 if ($hassiteconfig) {
     $ADMIN->add('themes', new admin_externalpage(
         'theme_shiftclass_profiles',

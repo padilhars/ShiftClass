@@ -103,7 +103,7 @@ echo html_writer::start_div('profile-edit-page');
 
 // Back button
 echo html_writer::link($manageurl, 
-    html_writer::tag('i', '', ['class' => 'fa fa-arrow-left mr-2']) . get_string('backtolist', 'theme_shiftclass'), 
+    html_writer::tag('i', '', ['class' => 'fa fa-arrow-left me-2']) . get_string('backtolist', 'theme_shiftclass'), 
     ['class' => 'btn btn-secondary mb-3']);
 
 // Page heading
@@ -115,7 +115,7 @@ if ($profileid) {
 
 // Information box
 echo html_writer::start_div('alert alert-info mt-3 mb-4');
-echo html_writer::tag('i', '', ['class' => 'fa fa-info-circle mr-2']);
+echo html_writer::tag('i', '', ['class' => 'fa fa-info-circle me-2']);
 echo get_string('profileforminfo', 'theme_shiftclass');
 echo html_writer::end_div();
 

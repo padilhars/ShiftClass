@@ -39,6 +39,7 @@ $PAGE->set_heading(get_string('visualprofiles', 'theme_shiftclass'));
 // Add CSS
 $PAGE->requires->css('/theme/shiftclass/styles/profiles_admin.css');
 
+
 // Add JavaScript AMD module
 $PAGE->requires->js_call_amd('theme_shiftclass/profiles_manager', 'init');
 
@@ -99,8 +100,8 @@ echo html_writer::start_div('profiles-actions mt-3');
 // Create new profile button
 $createurl = new moodle_url('/theme/shiftclass/edit_profile.php');
 echo html_writer::link($createurl, 
-    html_writer::tag('i', '', ['class' => 'fa fa-plus mr-2']) . get_string('createnewprofile', 'theme_shiftclass'), 
-    ['class' => 'btn btn-primary mr-2']);
+    html_writer::tag('i', '', ['class' => 'fa fa-plus me-2']) . get_string('createnewprofile', 'theme_shiftclass'), 
+    ['class' => 'btn btn-primary me-2']);
 
 // Install default profiles button (if no profiles exist)
 if (empty($profiles)) {
@@ -109,7 +110,7 @@ if (empty($profiles)) {
         'sesskey' => sesskey()
     ]);
     echo html_writer::link($installurl, 
-        html_writer::tag('i', '', ['class' => 'fa fa-download mr-2']) . get_string('installdefaultprofiles', 'theme_shiftclass'), 
+        html_writer::tag('i', '', ['class' => 'fa fa-download me-2']) . get_string('installdefaultprofiles', 'theme_shiftclass'), 
         ['class' => 'btn btn-secondary']);
 }
 
@@ -184,7 +185,7 @@ if (!empty($profiles)) {
         $actions .= html_writer::link('#', 
             html_writer::tag('i', '', ['class' => 'fa fa-eye']), 
             [
-                'class' => 'btn btn-sm btn-secondary mr-1 profile-preview-btn',
+                'class' => 'btn btn-sm btn-secondary me-1 profile-preview-btn',
                 'title' => get_string('preview', 'theme_shiftclass'),
                 'data-toggle' => 'tooltip',
                 'data-profileid' => $profile->id,
@@ -198,7 +199,7 @@ if (!empty($profiles)) {
         $actions .= html_writer::link($editurl, 
             html_writer::tag('i', '', ['class' => 'fa fa-edit']), 
             [
-                'class' => 'btn btn-sm btn-primary mr-1',
+                'class' => 'btn btn-sm btn-primary me-1',
                 'title' => get_string('edit'),
                 'data-toggle' => 'tooltip'
             ]);
@@ -239,7 +240,7 @@ if (!empty($profiles)) {
 } else {
     // No profiles message
     echo html_writer::start_div('alert alert-info');
-    echo html_writer::tag('i', '', ['class' => 'fa fa-info-circle mr-2']);
+    echo html_writer::tag('i', '', ['class' => 'fa fa-info-circle me-2']);
     echo get_string('noprofilescreated', 'theme_shiftclass');
     echo html_writer::end_div();
 }
