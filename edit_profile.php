@@ -28,8 +28,8 @@ require_once($CFG->libdir . '/adminlib.php');
 use theme_shiftclass\profiles_manager;
 use theme_shiftclass\form\profile_form;
 
-// Page setup
-admin_externalpage_setup('theme_shiftclass_profiles');
+// Page setup - Layout de uma coluna
+require_login();
 require_capability('theme/shiftclass:manageprofiles', context_system::instance());
 
 // Parameters
@@ -41,6 +41,8 @@ $editurl = new moodle_url('/theme/shiftclass/edit_profile.php');
 
 // Page setup
 $PAGE->set_url($editurl, ['id' => $profileid]);
+$PAGE->set_context(context_system::instance());
+$PAGE->set_pagelayout('admin'); // Layout administrativo sem sidebar
 
 // Load profile if editing
 $manager = new profiles_manager();
@@ -59,6 +61,9 @@ if ($profileid) {
 
 $PAGE->set_heading(get_string('visualprofiles', 'theme_shiftclass'));
 
+// Remover blocos laterais
+$PAGE->blocks->show_only_fake_blocks();
+
 // Add CSS
 $PAGE->requires->css('/theme/shiftclass/styles/profiles_admin.css');
 
@@ -72,6 +77,45 @@ if ($form->is_cancelled()) {
     
 } else if ($data = $form->get_data()) {
     try {
+        // Process file upload
+        if (isset($data->defaultheaderimage)) {
+            $context = context_system::instance();
+            $filearea = 'defaultheaderimage';
+            $itemid = $profileid ?: $data->id ?? 0;
+            
+            // Save files from draft area
+            file_save_draft_area_files(
+                $data->defaultheaderimage,
+                $context->id,
+                'theme_shiftclass',
+                $filearea,
+                $itemid,
+                [
+                    'subdirs' => 0,
+                    'maxbytes' => $CFG->maxbytes,
+                    'maxfiles' => 1
+                ]
+            );
+            
+            // Get file URL for database storage
+            $fs = get_file_storage();
+            $files = $fs->get_area_files($context->id, 'theme_shiftclass', $filearea, $itemid, 'filename', false);
+            
+            if (!empty($files)) {
+                $file = reset($files);
+                $data->defaultheaderimage = moodle_url::make_pluginfile_url(
+                    $context->id,
+                    'theme_shiftclass',
+                    $filearea,
+                    $itemid,
+                    '/',
+                    $file->get_filename()
+                )->out();
+            } else {
+                $data->defaultheaderimage = null;
+            }
+        }
+        
         if ($profileid) {
             // Update existing profile
             $manager->update_profile($profileid, $data);
@@ -80,6 +124,26 @@ if ($form->is_cancelled()) {
             // Create new profile
             $newid = $manager->create_profile($data);
             $message = get_string('profilecreated', 'theme_shiftclass');
+            
+            // If new profile and has file, update the itemid
+            if (isset($data->defaultheaderimage) && $data->defaultheaderimage) {
+                // Move files to correct itemid
+                $context = context_system::instance();
+                $filearea = 'defaultheaderimage';
+                
+                file_save_draft_area_files(
+                    $data->defaultheaderimage,
+                    $context->id,
+                    'theme_shiftclass',
+                    $filearea,
+                    $newid,
+                    [
+                        'subdirs' => 0,
+                        'maxbytes' => $CFG->maxbytes,
+                        'maxfiles' => 1
+                    ]
+                );
+            }
         }
         
         // Redirect with success message

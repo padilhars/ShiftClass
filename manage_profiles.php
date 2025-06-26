@@ -29,12 +29,18 @@ use theme_shiftclass\profiles_manager;
 use theme_shiftclass\output\profiles_list;
 
 // Page setup
-admin_externalpage_setup('theme_shiftclass_profiles');
+// Page setup - Layout de uma coluna
+require_login();
 require_capability('theme/shiftclass:manageprofiles', context_system::instance());
 
 $PAGE->set_url('/theme/shiftclass/manage_profiles.php');
+$PAGE->set_context(context_system::instance());
+$PAGE->set_pagelayout('admin'); // Layout administrativo sem sidebar
 $PAGE->set_title(get_string('manageprofiles', 'theme_shiftclass'));
 $PAGE->set_heading(get_string('visualprofiles', 'theme_shiftclass'));
+
+// Remover blocos laterais
+$PAGE->blocks->show_only_fake_blocks();
 
 // Add CSS
 $PAGE->requires->css('/theme/shiftclass/styles/profiles_admin.css');

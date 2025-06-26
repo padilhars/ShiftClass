@@ -185,16 +185,38 @@ function theme_shiftclass_get_extra_scss($theme) {
  * @return bool
  */
 function theme_shiftclass_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = array()) {
-    if ($context->contextlevel == CONTEXT_SYSTEM && ($filearea === 'logo' || $filearea === 'backgroundimage')) {
-        $theme = theme_config::load('shiftclass');
-        // By default, theme files must be cache-able by both browsers and proxies.
-        if (!array_key_exists('cacheability', $options)) {
-            $options['cacheability'] = 'public';
+    global $CFG;
+    
+    if ($context->contextlevel == CONTEXT_SYSTEM) {
+        if ($filearea === 'defaultheaderimage') {
+            // Serve profile header images
+            $fs = get_file_storage();
+            $itemid = array_shift($args);
+            $filename = array_pop($args);
+            $filepath = '/' . implode('/', $args) . '/';
+            
+            $file = $fs->get_file($context->id, 'theme_shiftclass', $filearea, $itemid, $filepath, $filename);
+            if (!$file) {
+                send_file_not_found();
+            }
+            
+            // By default, theme files must be cache-able by both browsers and proxies.
+            if (!array_key_exists('cacheability', $options)) {
+                $options['cacheability'] = 'public';
+            }
+            
+            send_stored_file($file, 86400, 0, $forcedownload, $options);
+            
+        } else if ($filearea === 'logo' || $filearea === 'backgroundimage') {
+            $theme = theme_config::load('shiftclass');
+            if (!array_key_exists('cacheability', $options)) {
+                $options['cacheability'] = 'public';
+            }
+            return $theme->setting_file_serve($filearea, $args, $forcedownload, $options);
         }
-        return $theme->setting_file_serve($filearea, $args, $forcedownload, $options);
-    } else {
-        send_file_not_found();
     }
+    
+    send_file_not_found();
 }
 
 /**

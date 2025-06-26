@@ -63,16 +63,23 @@ class profile_form extends moodleform {
         $mform->addHelpButton('name', 'profilename', 'theme_shiftclass');
         
         // Color fields with integrated color picker and text input
-        $this->add_color_field($mform, 'primarycolor', get_string('primarycolor', 'theme_shiftclass'), '#0066CC');
-        $this->add_color_field($mform, 'secondarycolor', get_string('secondarycolor', 'theme_shiftclass'), '#004499');
-        $this->add_color_field($mform, 'backgroundcolor', get_string('backgroundcolor', 'theme_shiftclass'), '#F0F5FF');
+        $primarycolor = $isediting ? $profile->primarycolor : '#0066CC';
+        $secondarycolor = $isediting ? $profile->secondarycolor : '#004499';
+        $backgroundcolor = $isediting ? $profile->backgroundcolor : '#F0F5FF';
         
-        // Default header image
-        $mform->addElement('filepicker', 'defaultheaderimage', get_string('defaultheaderimage', 'theme_shiftclass'), null, [
-            'accepted_types' => ['.jpg', '.jpeg', '.png', '.gif'],
-            'maxbytes' => $CFG->maxbytes
-        ]);
-        $mform->addHelpButton('defaultheaderimage', 'defaultheaderimage', 'theme_shiftclass');
+        $this->add_color_field($mform, 'primarycolor', get_string('primarycolor', 'theme_shiftclass'), $primarycolor);
+        $this->add_color_field($mform, 'secondarycolor', get_string('secondarycolor', 'theme_shiftclass'), $secondarycolor);
+        $this->add_color_field($mform, 'backgroundcolor', get_string('backgroundcolor', 'theme_shiftclass'), $backgroundcolor);
+
+        // WCAG contrast validation info
+        $mform->addElement('html', '<div class="mb-3 row">');
+        $mform->addElement('html', '<div class="col-md-3"></div>');
+        $mform->addElement('html', '<div class="col-md-9">');
+        $mform->addElement('html', '<div id="contrast-validation" class="alert alert-info">');
+        $mform->addElement('html', '<i class="fa fa-info-circle"></i> ' . get_string('contrastvalidation', 'theme_shiftclass'));
+        $mform->addElement('html', '</div>');
+        $mform->addElement('html', '</div>');
+        $mform->addElement('html', '</div>');
         
         // Live preview section
         $mform->addElement('html', '<div class="mb-3 row">');
@@ -84,15 +91,12 @@ class profile_form extends moodleform {
         $mform->addElement('html', '</div>');
         $mform->addElement('html', '</div>');
         
-        // WCAG contrast validation info
-        $mform->addElement('html', '<div class="mb-3 row">');
-        $mform->addElement('html', '<div class="col-md-3"></div>');
-        $mform->addElement('html', '<div class="col-md-9">');
-        $mform->addElement('html', '<div id="contrast-validation" class="alert alert-info">');
-        $mform->addElement('html', '<i class="fa fa-info-circle"></i> ' . get_string('contrastvalidation', 'theme_shiftclass'));
-        $mform->addElement('html', '</div>');
-        $mform->addElement('html', '</div>');
-        $mform->addElement('html', '</div>');
+        // Default header image
+        $mform->addElement('filepicker', 'defaultheaderimage', get_string('defaultheaderimage', 'theme_shiftclass'), null, [
+            'accepted_types' => ['.jpg', '.jpeg', '.png', '.gif'],
+            'maxbytes' => $CFG->maxbytes
+        ]);
+        $mform->addHelpButton('defaultheaderimage', 'defaultheaderimage', 'theme_shiftclass');
         
         // Action buttons
         $this->add_action_buttons();
@@ -103,7 +107,7 @@ class profile_form extends moodleform {
         }
         
         // Add JavaScript for live preview
-        $this->add_javascript();
+        $this->add_javascript($isediting, $primarycolor, $secondarycolor, $backgroundcolor);
     }
     
     /**
@@ -112,9 +116,9 @@ class profile_form extends moodleform {
      * @param MoodleQuickForm $mform Form instance
      * @param string $name Field name
      * @param string $label Field label
-     * @param string $default Default color
+     * @param string $currentvalue Current color value
      */
-    private function add_color_field($mform, $name, $label, $default) {
+    private function add_color_field($mform, $name, $label, $currentvalue) {
         $mform->addElement('html', '<div class="mb-3 row fitem">');
         $mform->addElement('html', '<div class="col-md-3">' . $label . '</div>');
         $mform->addElement('html', '<div class="col-md-9">');
@@ -126,18 +130,19 @@ class profile_form extends moodleform {
             'maxlength' => 7,
             'class' => 'color-text-input',
             'pattern' => '^#[0-9A-Fa-f]{6}$',
-            'placeholder' => '#RRGGBB'
+            'placeholder' => '#RRGGBB',
+            'value' => $currentvalue
         ]);
         $mform->setType($name, PARAM_TEXT);
-        $mform->setDefault($name, $default);
+        $mform->setDefault($name, $currentvalue);
         $mform->addRule($name, get_string('required'), 'required', null, 'client');
         $mform->addRule($name, get_string('error:invalidcolor', 'theme_shiftclass'), 'regex', '/^#[0-9A-Fa-f]{6}$/', 'client');
         
-        // Color picker
-        $mform->addElement('html', '<input type="color" class="color-picker" data-target="' . $name . '" value="' . $default . '">');
+        // Color picker - usar o valor atual
+        $mform->addElement('html', '<input type="color" class="color-picker" data-target="' . $name . '" value="' . $currentvalue . '">');
         
-        // Color preview
-        $mform->addElement('html', '<span class="color-preview" style="background-color: ' . $default . '"></span>');
+        // Color preview - usar o valor atual
+        //$mform->addElement('html', '<span class="color-preview" style="background-color: ' . $currentvalue . '"></span>');
         
         $mform->addElement('html', '</div>');
         
@@ -178,10 +183,24 @@ class profile_form extends moodleform {
     
     /**
      * Add JavaScript for live preview and color synchronization
+     * 
+     * @param bool $isediting Whether editing existing profile
+     * @param string $primarycolor Primary color value
+     * @param string $secondarycolor Secondary color value
+     * @param string $backgroundcolor Background color value
      */
-    private function add_javascript() {
+    private function add_javascript($isediting, $primarycolor, $secondarycolor, $backgroundcolor) {
         global $PAGE;
-        $PAGE->requires->js_call_amd('theme_shiftclass/profile_form', 'init');
+        
+        // Pass initial colors to JavaScript
+        $initialcolors = [
+            'primarycolor' => $primarycolor,
+            'secondarycolor' => $secondarycolor,
+            'backgroundcolor' => $backgroundcolor,
+            'isediting' => $isediting
+        ];
+        
+        $PAGE->requires->js_call_amd('theme_shiftclass/profile_form', 'init', [$initialcolors]);
     }
     
     /**

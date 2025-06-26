@@ -136,7 +136,7 @@
 
 /* Form Styling */
 .profile-edit-page {
-    max-width: 800px;
+    max-width: 90%;
     margin: 0 auto;
 }
 
@@ -171,22 +171,19 @@
     border: none;
 }
 
-.color-preview {
-    display: inline-block;
-    width: 38px;
-    height: 38px;
-    border: 1px solid #ced4da;
-    border-radius: 0.25rem;
-    position: relative;
+/* Live Preview */
+.profile-preview-container::before {
+    content: "🎨 Preview em Tempo Real";
+    display: block;
+    font-weight: 600;
+    margin-bottom: 15px;
 }
 
-/* Live Preview */
 .profile-preview-container {
-    border: 1px solid #dee2e6;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
     border-radius: 0.5rem;
-    padding: 1.5rem;
-    background-color: #f8f9fa;
-    margin-top: 1rem;
+    padding: 20px;
+    margin: 15px 0;
 }
 
 .profile-preview {
@@ -196,19 +193,15 @@
 }
 
 .preview-navbar {
-    height: 60px;
-    display: flex;
-    align-items: center;
-    padding: 0 1.5rem;
-    color: white;
-    font-weight: 500;
-    font-size: 1.1rem;
+    background-color: var(--preview-primary, #0066CC);
+    transition: background-color 0.3s ease;
 }
 
 .preview-content {
-    min-height: 250px;
-    padding: 2rem;
+    background-color: var(--preview-background, #F0F5FF);
+    transition: background-color 0.3s ease;
 }
+
 
 .preview-card {
     background: white;
@@ -351,8 +344,7 @@
 
 /* High Contrast Mode Support */
 @media (prefers-contrast: high) {
-    .color-sample,
-    .color-preview {
+    .color-sample {
         border-width: 3px;
         border-color: #000;
     }
@@ -384,8 +376,7 @@
     }
     
     .color-text-input,
-    .color-picker,
-    .color-preview {
+    .color-picker {
         border-color: #495057;
         background-color: #212529;
         color: #f8f9fa;

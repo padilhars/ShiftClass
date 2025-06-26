@@ -27,8 +27,8 @@ require_once($CFG->libdir . '/adminlib.php');
 
 use theme_shiftclass\profiles_manager;
 
-// Page setup
-admin_externalpage_setup('theme_shiftclass_profiles');
+// Page setup - Layout de uma coluna
+require_login();
 require_capability('theme/shiftclass:manageprofiles', context_system::instance());
 
 // Parameters
@@ -41,8 +41,13 @@ $deleteurl = new moodle_url('/theme/shiftclass/delete_profile.php', ['id' => $pr
 
 // Page setup
 $PAGE->set_url($deleteurl);
+$PAGE->set_context(context_system::instance());
+$PAGE->set_pagelayout('admin'); // Layout administrativo sem sidebar
 $PAGE->set_title(get_string('deleteprofile', 'theme_shiftclass'));
 $PAGE->set_heading(get_string('visualprofiles', 'theme_shiftclass'));
+
+// Remover blocos laterais
+$PAGE->blocks->show_only_fake_blocks();
 
 // Load profile
 $manager = new profiles_manager();
