@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2025012100;  // YYYYMMDDXX format
+$plugin->version   = 2025012204;  // YYYYMMDDXX format
 $plugin->requires  = 2024100700;  // Requires Moodle 5.0+
 $plugin->component = 'theme_shiftclass';
 $plugin->maturity  = MATURITY_ALPHA;

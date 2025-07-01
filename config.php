@@ -27,7 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 // Theme name
 $THEME->name = 'shiftclass';
 
-// Inherit from Boost theme
+// Inherit from Boost theme - this will automatically inherit ALL layouts
 $THEME->parents = ['boost'];
 
 // Use theme settings
@@ -46,119 +46,10 @@ $THEME->scss = function($theme) {
 $THEME->prescsscallback = 'theme_shiftclass_get_pre_scss';
 $THEME->extrascsscallback = 'theme_shiftclass_get_extra_scss';
 
-// Layouts inherited from Boost
-$THEME->layouts = [
-    'base' => [
-        'theme' => 'boost',
-        'file' => 'columns2.php',
-        'regions' => ['side-pre'],
-        'defaultregion' => 'side-pre',
-    ],
-    'standard' => [
-        'theme' => 'boost',
-        'file' => 'columns2.php',
-        'regions' => ['side-pre'],
-        'defaultregion' => 'side-pre',
-    ],
-    'course' => [
-        'theme' => 'boost',
-        'file' => 'columns2.php',
-        'regions' => ['side-pre'],
-        'defaultregion' => 'side-pre',
-        'options' => ['langmenu' => true],
-    ],
-    'coursecategory' => [
-        'theme' => 'boost',
-        'file' => 'columns2.php',
-        'regions' => ['side-pre'],
-        'defaultregion' => 'side-pre',
-    ],
-    'incourse' => [
-        'theme' => 'boost',
-        'file' => 'columns2.php',
-        'regions' => ['side-pre'],
-        'defaultregion' => 'side-pre',
-    ],
-    'frontpage' => [
-        'theme' => 'boost',
-        'file' => 'columns2.php',
-        'regions' => ['side-pre'],
-        'defaultregion' => 'side-pre',
-        'options' => ['nonavbar' => true],
-    ],
-    'admin' => [
-        'theme' => 'boost',
-        'file' => 'columns2.php',
-        'regions' => ['side-pre'],
-        'defaultregion' => 'side-pre',
-    ],
-    'mydashboard' => [
-        'theme' => 'boost',
-        'file' => 'columns2.php',
-        'regions' => ['side-pre'],
-        'defaultregion' => 'side-pre',
-        'options' => ['nonavbar' => true, 'langmenu' => true],
-    ],
-    'mypublic' => [
-        'theme' => 'boost',
-        'file' => 'columns2.php',
-        'regions' => ['side-pre'],
-        'defaultregion' => 'side-pre',
-    ],
-    'login' => [
-        'theme' => 'boost',
-        'file' => 'login.php',
-        'regions' => [],
-        'options' => ['langmenu' => true],
-    ],
-    'popup' => [
-        'theme' => 'boost',
-        'file' => 'columns1.php',
-        'regions' => [],
-        'options' => ['nofooter' => true, 'nonavbar' => true],
-    ],
-    'frametop' => [
-        'theme' => 'boost',
-        'file' => 'columns1.php',
-        'regions' => [],
-        'options' => ['nofooter' => true, 'nocoursefooter' => true],
-    ],
-    'embedded' => [
-        'theme' => 'boost',
-        'file' => 'embedded.php',
-        'regions' => [],
-    ],
-    'maintenance' => [
-        'theme' => 'boost',
-        'file' => 'maintenance.php',
-        'regions' => [],
-    ],
-    'print' => [
-        'theme' => 'boost',
-        'file' => 'columns1.php',
-        'regions' => [],
-        'options' => ['nofooter' => true, 'nonavbar' => false],
-    ],
-    'redirect' => [
-        'theme' => 'boost',
-        'file' => 'redirect.php',
-        'regions' => [],
-    ],
-    'report' => [
-        'theme' => 'boost',
-        'file' => 'columns2.php',
-        'regions' => ['side-pre'],
-        'defaultregion' => 'side-pre',
-    ],
-    'secure' => [
-        'theme' => 'boost',
-        'file' => 'secure.php',
-        'regions' => ['side-pre'],
-        'defaultregion' => 'side-pre'
-    ]
-];
+// DO NOT define $THEME->layouts - let it inherit completely from Boost
+// This ensures all sidebars, course index, and block regions work correctly
 
-// Additional theme options
+// Additional theme options - inherit from Boost
 $THEME->iconsystem = \core\output\icon_system::FONTAWESOME;
 $THEME->haseditswitch = true;
 $THEME->usescourseindex = true;

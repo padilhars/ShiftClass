@@ -84,26 +84,45 @@ function theme_shiftclass_get_pre_scss($theme) {
     // 1. PRIMEIRO: Definir valores padrão para variáveis SCSS
     $scss .= '$primary: #0f6cbf !default;' . "\n";
     $scss .= '$secondary: #6c757d !default;' . "\n";
+    $scss .= '$success: #28a745 !default;' . "\n";
+    $scss .= '$info: #17a2b8 !default;' . "\n";
+    $scss .= '$warning: #ffc107 !default;' . "\n";
+    $scss .= '$danger: #dc3545 !default;' . "\n";
+    $scss .= '$light: #f8f9fa !default;' . "\n";
+    $scss .= '$dark: #343a40 !default;' . "\n";
     $scss .= '$white: #ffffff !default;' . "\n";
     $scss .= '$black: #000000 !default;' . "\n";
     $scss .= '$gray-100: #f8f9fa !default;' . "\n";
+    $scss .= '$gray-200: #e9ecef !default;' . "\n";
     $scss .= '$gray-300: #dee2e6 !default;' . "\n";
+    $scss .= '$gray-400: #ced4da !default;' . "\n";
+    $scss .= '$gray-500: #adb5bd !default;' . "\n";
     $scss .= '$gray-600: #6c757d !default;' . "\n";
+    $scss .= '$gray-700: #495057 !default;' . "\n";
+    $scss .= '$gray-800: #343a40 !default;' . "\n";
     $scss .= '$gray-900: #212529 !default;' . "\n";
     $scss .= '$yellow: #ffc107 !default;' . "\n";
     $scss .= '$spacer: 1rem !default;' . "\n";
     $scss .= '$font-size-base: 1rem !default;' . "\n";
+    $scss .= '$h1-font-size: 2.5rem !default;' . "\n";
     $scss .= '$h2-font-size: 2rem !default;' . "\n";
+    $scss .= '$h3-font-size: 1.75rem !default;' . "\n";
+    $scss .= '$h4-font-size: 1.5rem !default;' . "\n";
     $scss .= '$h5-font-size: 1.25rem !default;' . "\n";
     $scss .= '$h6-font-size: 1rem !default;' . "\n";
     $scss .= '$font-weight-bold: 700 !default;' . "\n";
     $scss .= '$font-weight-semibold: 600 !default;' . "\n";
-    $scss .= '$font-weight-medium: 500 !default;' . "\n\n";
+    $scss .= '$font-weight-medium: 500 !default;' . "\n";
+    $scss .= '$font-weight-normal: 400 !default;' . "\n";
+    $scss .= '$body-bg: #f8f9fa !default;' . "\n\n";
     
     // 2. SEGUNDO: Sobrescrever com valores de configuração
     $configurable = [
         // Config key => [variableName, ...].
         'brandcolor' => ['primary'],
+        'secondarycolor' => ['secondary'],
+        'accentcolor' => ['success', 'info'], // Use accent color for success and info states
+        'backgroundcolor' => ['body-bg', 'light'],
     ];
 
     foreach ($configurable as $configkey => $targets) {

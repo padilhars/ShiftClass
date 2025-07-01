@@ -38,8 +38,22 @@ $string['preset'] = 'Theme preset';
 $string['preset_desc'] = 'Pick a preset to broadly change the look of the theme.';
 $string['presetdefault'] = 'Default';
 $string['presetplain'] = 'Plain';
-$string['brandcolor'] = 'Brand colour';
-$string['brandcolor_desc'] = 'The main colour used throughout the theme.';
+
+// Colors section
+$string['colorsheading'] = 'Color Settings';
+$string['colorsheading_desc'] = 'Customize the theme colors. These colors will be used throughout the site and can be overridden by individual course visual profiles.';
+
+$string['brandcolor'] = 'Primary color';
+$string['brandcolor_desc'] = 'The primary color used for navigation, buttons, and main elements throughout the theme.';
+
+$string['secondarycolor'] = 'Secondary color';
+$string['secondarycolor_desc'] = 'The secondary color used for supporting elements, hover states, and complementary design features.';
+
+$string['accentcolor'] = 'Accent color';
+$string['accentcolor_desc'] = 'The accent color used for highlights, success messages, and call-to-action elements.';
+
+$string['backgroundcolor'] = 'Background color';
+$string['backgroundcolor_desc'] = 'The main background color for pages. Choose a light color for better readability.';
 
 // Advanced settings
 $string['rawscsspre'] = 'Raw initial SCSS';
@@ -59,10 +73,10 @@ $string['profilename'] = 'Profile name';
 $string['profilename_help'] = 'Enter a unique name for this visual profile.';
 $string['primarycolor'] = 'Primary color';
 $string['primarycolor_help'] = 'Main color used for navigation bar and primary elements.';
-$string['secondarycolor'] = 'Secondary color';
-$string['secondarycolor_help'] = 'Color used for buttons, links, and highlights.';
-$string['backgroundcolor'] = 'Background color';
-$string['backgroundcolor_help'] = 'Color used for the page background.';
+$string['secondarycolor_profile'] = 'Secondary color';
+$string['secondarycolor_profile_help'] = 'Color used for buttons, links, and highlights.';
+$string['backgroundcolor_profile'] = 'Background color';
+$string['backgroundcolor_profile_help'] = 'Color used for the page background.';
 
 // Course settings (for future phases)
 $string['coursevisualprofile'] = 'Visual profile';
@@ -82,3 +96,11 @@ $string['region-side-pre'] = 'Left sidebar';
 $string['error:profilenotfound'] = 'Visual profile not found';
 $string['error:invalidcolor'] = 'Invalid color format. Please use hexadecimal format (#RRGGBB)';
 $string['error:duplicateprofilename'] = 'A profile with this name already exists';
+
+// Color preview and helpers
+$string['colorpreview'] = 'Color preview';
+$string['resetcolors'] = 'Reset to default colors';
+$string['colorscheme'] = 'Color scheme';
+$string['customcolors'] = 'Custom colors';
+$string['colortips'] = 'Color tips';
+$string['colortips_desc'] = 'Choose colors that provide good contrast for readability. The primary color should be bold enough for navigation elements, while the background should be light and subtle.';

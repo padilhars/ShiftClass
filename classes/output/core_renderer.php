@@ -24,27 +24,8 @@
 
 namespace theme_shiftclass\output;
 
-use coding_exception;
-use html_writer;
-use tabobject;
-use tabtree;
-use custom_menu_item;
-use custom_menu;
-use block_contents;
-use navigation_node;
-use action_link;
 use stdClass;
-use moodle_url;
-use preferences_groups;
-use action_menu;
-use help_icon;
-use single_button;
-use single_select;
-use paging_bar;
-use url_select;
 use context_course;
-use pix_icon;
-use theme_config;
 
 defined('MOODLE_INTERNAL') || die;
 
@@ -59,7 +40,9 @@ defined('MOODLE_INTERNAL') || die;
 class core_renderer extends \theme_boost\output\core_renderer {
 
     /**
-     * Override to add visual profile CSS variables
+     * Override to add visual profile CSS variables when needed
+     * Currently maintains Boost behavior - will be enhanced in Phase 2
+     * 
      * @return string HTML to output.
      */
     public function standard_head_html() {
@@ -67,11 +50,12 @@ class core_renderer extends \theme_boost\output\core_renderer {
         
         $output = parent::standard_head_html();
         
-        // Add visual profile CSS variables if in a course context
+        // Stub: In Phase 2, this will add dynamic CSS for visual profiles
+        // For now, we maintain exact Boost behavior
         if ($PAGE->context->contextlevel == CONTEXT_COURSE && $COURSE->id != SITEID) {
             $profilecss = $this->get_visual_profile_css($COURSE->id);
             if (!empty($profilecss)) {
-                $output .= html_writer::tag('style', $profilecss, array('type' => 'text/css'));
+                $output .= $profilecss;
             }
         }
         
@@ -80,103 +64,14 @@ class core_renderer extends \theme_boost\output\core_renderer {
     
     /**
      * Get visual profile CSS for a course
-     * Stub for future implementation
+     * Stub for Phase 2 implementation
      * 
      * @param int $courseid
      * @return string CSS content
      */
     protected function get_visual_profile_css($courseid) {
-        global $DB;
-        
-        // Stub: This will be implemented in Phase 3
+        // Stub: This will be implemented in Phase 2
         // Will generate CSS variables based on the course's assigned visual profile
-        
         return '';
-    }
-    
-    /**
-     * Override to add course header image
-     * @return string HTML to output.
-     */
-    public function full_header() {
-        global $COURSE, $PAGE;
-        
-        $header = parent::full_header();
-        
-        // Add course header image if available and in course context
-        if ($PAGE->context->contextlevel == CONTEXT_COURSE && $COURSE->id != SITEID) {
-            $courseheader = $this->get_course_header_image($COURSE);
-            if (!empty($courseheader)) {
-                // Insert course header before the main header content
-                $header = $courseheader . $header;
-            }
-        }
-        
-        return $header;
-    }
-    
-    /**
-     * Get course header image HTML
-     * Stub for future implementation
-     * 
-     * @param stdClass $course
-     * @return string HTML content
-     */
-    protected function get_course_header_image($course) {
-        global $CFG, $OUTPUT;
-        
-        // Stub: This will be implemented in Phase 3
-        // Will display course image with gradient overlay and course info
-        
-        return '';
-    }
-    
-    /**
-     * Override to add accessibility improvements
-     * @return string HTML to output.
-     */
-    public function render_from_template($templatename, $context) {
-        // Add accessibility data where needed
-        if (is_object($context) || is_array($context)) {
-            $this->add_accessibility_attributes($context);
-        }
-        
-        return parent::render_from_template($templatename, $context);
-    }
-    
-    /**
-     * Add accessibility attributes to template context
-     * 
-     * @param mixed $context Template context
-     */
-    protected function add_accessibility_attributes(&$context) {
-        // Stub: Will add WCAG 2.1 compliance attributes
-        // This includes proper ARIA labels, roles, and other accessibility features
-    }
-    
-    /**
-     * Override to support high contrast mode
-     * @return string
-     */
-    public function body_attributes($additionalclasses = array()) {
-        global $USER;
-        
-        $classes = parent::body_attributes($additionalclasses);
-        
-        // Check for user preference for high contrast mode
-        if (!empty($USER->id)) {
-            $highcontrast = get_user_preferences('theme_shiftclass_highcontrast', 0);
-            if ($highcontrast) {
-                $classes = str_replace('class="', 'class="shiftclass-high-contrast ', $classes);
-            }
-            
-            // Check for reduced motion preference
-            $reducedmotion = get_user_preferences('theme_shiftclass_reducedmotion', 0);
-            if ($reducedmotion) {
-                $classes = str_replace('class="', 'class="shiftclass-reduced-motion ', $classes);
-            }
-        }
-        
-        return $classes;
     }
 }

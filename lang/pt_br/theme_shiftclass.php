@@ -38,8 +38,22 @@ $string['preset'] = 'Predefinição do tema';
 $string['preset_desc'] = 'Escolha uma predefinição para alterar amplamente a aparência do tema.';
 $string['presetdefault'] = 'Padrão';
 $string['presetplain'] = 'Simples';
-$string['brandcolor'] = 'Cor da marca';
-$string['brandcolor_desc'] = 'A cor principal usada em todo o tema.';
+
+// Seção de cores
+$string['colorsheading'] = 'Configurações de Cores';
+$string['colorsheading_desc'] = 'Personalize as cores do tema. Essas cores serão usadas em todo o site e podem ser sobrescritas por perfis visuais individuais de cursos.';
+
+$string['brandcolor'] = 'Cor primária';
+$string['brandcolor_desc'] = 'A cor primária usada para navegação, botões e elementos principais em todo o tema.';
+
+$string['secondarycolor'] = 'Cor secundária';
+$string['secondarycolor_desc'] = 'A cor secundária usada para elementos de apoio, estados de hover e recursos de design complementares.';
+
+$string['accentcolor'] = 'Cor de destaque';
+$string['accentcolor_desc'] = 'A cor de destaque usada para realces, mensagens de sucesso e elementos de chamada para ação.';
+
+$string['backgroundcolor'] = 'Cor de fundo';
+$string['backgroundcolor_desc'] = 'A cor de fundo principal das páginas. Escolha uma cor clara para melhor legibilidade.';
 
 // Configurações avançadas
 $string['rawscsspre'] = 'SCSS inicial bruto';
@@ -59,10 +73,10 @@ $string['profilename'] = 'Nome do perfil';
 $string['profilename_help'] = 'Digite um nome único para este perfil visual.';
 $string['primarycolor'] = 'Cor primária';
 $string['primarycolor_help'] = 'Cor principal usada para barra de navegação e elementos principais.';
-$string['secondarycolor'] = 'Cor secundária';
-$string['secondarycolor_help'] = 'Cor usada para botões, links e destaques.';
-$string['backgroundcolor'] = 'Cor de fundo';
-$string['backgroundcolor_help'] = 'Cor usada para o fundo da página.';
+$string['secondarycolor_profile'] = 'Cor secundária';
+$string['secondarycolor_profile_help'] = 'Cor usada para botões, links e destaques.';
+$string['backgroundcolor_profile'] = 'Cor de fundo';
+$string['backgroundcolor_profile_help'] = 'Cor usada para o fundo da página.';
 
 // Configurações do curso (para fases futuras)
 $string['coursevisualprofile'] = 'Perfil visual';
@@ -82,3 +96,11 @@ $string['region-side-pre'] = 'Barra lateral esquerda';
 $string['error:profilenotfound'] = 'Perfil visual não encontrado';
 $string['error:invalidcolor'] = 'Formato de cor inválido. Use o formato hexadecimal (#RRGGBB)';
 $string['error:duplicateprofilename'] = 'Já existe um perfil com este nome';
+
+// Visualização de cores e auxiliares
+$string['colorpreview'] = 'Visualização de cores';
+$string['resetcolors'] = 'Redefinir para cores padrão';
+$string['colorscheme'] = 'Esquema de cores';
+$string['customcolors'] = 'Cores personalizadas';
+$string['colortips'] = 'Dicas de cores';
+$string['colortips_desc'] = 'Escolha cores que forneçam bom contraste para legibilidade. A cor primária deve ser forte o suficiente para elementos de navegação, enquanto o fundo deve ser claro e sutil.';

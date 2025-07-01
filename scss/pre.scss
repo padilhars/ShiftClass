@@ -26,26 +26,35 @@
     // Default theme colors (can be overridden by profiles)
     --shiftclass-primary: #{$primary};
     --shiftclass-secondary: #{$secondary};
-    --shiftclass-background: #{$white};
+    --shiftclass-accent: #{$success}; // Using success color as accent
+    --shiftclass-background: #{$body-bg};
     
     // Create darker versions for hover states
     --shiftclass-primary-dark: #{darken($primary, 10%)};
     --shiftclass-secondary-dark: #{darken($secondary, 10%)};
+    --shiftclass-accent-dark: #{darken($success, 10%)};
     --shiftclass-primary-darker: #{darken($primary, 15%)};
     
     // RGB values for transparency effects
     --shiftclass-primary-rgb: #{red($primary)}, #{green($primary)}, #{blue($primary)};
+    --shiftclass-secondary-rgb: #{red($secondary)}, #{green($secondary)}, #{blue($secondary)};
+    --shiftclass-accent-rgb: #{red($success)}, #{green($success)}, #{blue($success)};
     
     // Additional theme variables
     --shiftclass-text-primary: #{$gray-900};
     --shiftclass-text-secondary: #{$gray-600};
+    --shiftclass-text-muted: #{$gray-500};
     --shiftclass-border-color: #{$gray-300};
+    --shiftclass-border-light: #{$gray-200};
     --shiftclass-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    --shiftclass-shadow-lg: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
     --shiftclass-border-radius: 0.375rem;
+    --shiftclass-border-radius-lg: 0.5rem;
     
     // Transition variables for smooth animations
     --shiftclass-transition-base: all 0.3s ease-in-out;
     --shiftclass-transition-fast: all 0.15s ease-in-out;
+    --shiftclass-transition-slow: all 0.45s ease-in-out;
 }
 
 // Mixins for Visual Profiles
@@ -63,19 +72,20 @@
             &:focus {
                 background-color: var(--shiftclass-secondary);
                 color: rgba(255, 255, 255, 1) !important;
+                border-radius: var(--shiftclass-border-radius);
+                transition: var(--shiftclass-transition-fast);
             }
         }
 
+        // Navbar shadow effect
         &:after {
             content: '';
             width: 100%;
             position: absolute;
-            background-image: url(https://wp.ufpel.edu.br/cpted/wp-content/themes/viral/images/shadow.png);
-            background-repeat: no-repeat;
-            background-size: cover;
-            height: 40px;
-            top: 61px;
-            opacity: .7;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1), transparent);
+            height: 10px;
+            top: 100%;
+            left: 0;
             pointer-events: none;
         }
     }
@@ -86,9 +96,12 @@
         border-color: var(--shiftclass-primary);
         
         &:hover,
-        &:focus {
+        &:focus,
+        &:active {
             background-color: var(--shiftclass-primary-dark);
             border-color: var(--shiftclass-primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shiftclass-shadow-lg);
         }
     }
     
@@ -97,9 +110,27 @@
         border-color: var(--shiftclass-secondary);
         
         &:hover,
-        &:focus {
+        &:focus,
+        &:active {
             background-color: var(--shiftclass-secondary-dark);
             border-color: var(--shiftclass-secondary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shiftclass-shadow-lg);
+        }
+    }
+    
+    .btn-success,
+    .btn-info {
+        background-color: var(--shiftclass-accent);
+        border-color: var(--shiftclass-accent);
+        
+        &:hover,
+        &:focus,
+        &:active {
+            background-color: var(--shiftclass-accent-dark);
+            border-color: var(--shiftclass-accent-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shiftclass-shadow-lg);
         }
     }
     
@@ -110,20 +141,70 @@
     }
     
     // Links
-    a:not(.btn) {
+    a:not(.btn):not(.navbar-brand):not(.nav-link) {
         color: var(--shiftclass-primary);
+        transition: var(--shiftclass-transition-fast);
         
         &:hover,
         &:focus {
             color: var(--shiftclass-primary-darker);
+            text-decoration: underline;
+        }
+    }
+    
+    // Form controls
+    .form-control,
+    .custom-select {
+        border-color: var(--shiftclass-border-color);
+        
+        &:focus {
+            border-color: var(--shiftclass-primary);
+            box-shadow: 0 0 0 0.2rem rgba(var(--shiftclass-primary-rgb), 0.25);
+        }
+    }
+    
+    // Cards and blocks
+    .card,
+    .block {
+        border-color: var(--shiftclass-border-light);
+        
+        .card-header {
+            background-color: rgba(var(--shiftclass-primary-rgb), 0.05);
+            border-bottom-color: var(--shiftclass-border-light);
+        }
+    }
+    
+    // Breadcrumbs
+    .breadcrumb {
+        .breadcrumb-item {
+            &.active {
+                color: var(--shiftclass-primary);
+            }
+            
+            + .breadcrumb-item::before {
+                color: var(--shiftclass-text-muted);
+            }
+        }
+    }
+    
+    // Tables
+    .table {
+        th {
+            background-color: rgba(var(--shiftclass-primary-rgb), 0.08);
+            color: var(--shiftclass-text-primary);
+        }
+        
+        tbody tr:hover {
+            background-color: rgba(var(--shiftclass-accent-rgb), 0.05);
         }
     }
 }
 
 // Accessibility Mixins
 @mixin shiftclass-focus-outline() {
-    outline: 2px solid var(--shiftclass-primary);
+    outline: 2px solid var(--shiftclass-accent);
     outline-offset: 2px;
+    border-radius: var(--shiftclass-border-radius);
 }
 
 @mixin shiftclass-high-contrast() {
@@ -132,15 +213,36 @@
     
     * {
         border-color: $white !important;
+        background-color: $black !important;
+        color: $white !important;
     }
     
     a {
         color: $yellow !important;
         text-decoration: underline !important;
+        
+        &:hover,
+        &:focus {
+            background-color: $yellow !important;
+            color: $black !important;
+        }
     }
     
     .btn {
         border: 2px solid $white !important;
+        background-color: $black !important;
+        color: $white !important;
+        
+        &:hover,
+        &:focus {
+            background-color: $white !important;
+            color: $black !important;
+        }
+    }
+    
+    img,
+    svg {
+        filter: invert(1) hue-rotate(180deg);
     }
 }
 
@@ -159,14 +261,22 @@
 @mixin shiftclass-responsive-spacing() {
     @include media-breakpoint-down(sm) {
         padding: $spacer * 0.5;
+        margin: $spacer * 0.25 0;
     }
     
     @include media-breakpoint-up(md) {
         padding: $spacer;
+        margin: $spacer * 0.5 0;
     }
     
     @include media-breakpoint-up(lg) {
         padding: $spacer * 1.5;
+        margin: $spacer 0;
+    }
+    
+    @include media-breakpoint-up(xl) {
+        padding: $spacer * 2;
+        margin: $spacer * 1.5 0;
     }
 }
 
@@ -176,8 +286,13 @@
     width: 100%;
     height: 300px;
     overflow: hidden;
-    border-radius: var(--shiftclass-border-radius);
+    border-radius: var(--shiftclass-border-radius-lg);
     margin-bottom: $spacer * 2;
+    box-shadow: var(--shiftclass-shadow-lg);
+    
+    @include media-breakpoint-down(md) {
+        height: 200px;
+    }
     
     // Gradient overlay
     &::before {
@@ -186,8 +301,11 @@
         bottom: 0;
         left: 0;
         right: 0;
-        height: 60%;
-        background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+        height: 70%;
+        background: linear-gradient(to top, 
+            rgba(0, 0, 0, 0.8) 0%,
+            rgba(0, 0, 0, 0.4) 40%,
+            transparent 100%);
         z-index: 1;
     }
     
@@ -196,6 +314,7 @@
         position: absolute;
         bottom: $spacer * 2;
         left: $spacer * 2;
+        right: $spacer * 2;
         z-index: 2;
         color: $white;
         
@@ -203,11 +322,34 @@
             margin-bottom: $spacer * 0.5;
             font-size: $h2-font-size;
             font-weight: $font-weight-bold;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            
+            @include media-breakpoint-down(md) {
+                font-size: $h3-font-size;
+            }
         }
         
         .course-description {
             font-size: $font-size-base;
-            opacity: 0.9;
+            opacity: 0.95;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            line-height: 1.4;
+            
+            @include media-breakpoint-down(md) {
+                font-size: $font-size-base * 0.9;
+            }
+        }
+        
+        .course-meta {
+            margin-top: $spacer * 0.5;
+            font-size: $font-size-base * 0.85;
+            opacity: 0.8;
+            
+            .badge {
+                background-color: rgba(var(--shiftclass-accent-rgb), 0.8);
+                color: $white;
+                margin-right: $spacer * 0.5;
+            }
         }
     }
 }
@@ -215,13 +357,32 @@
 // Card Styling Mixins
 @mixin shiftclass-card() {
     background-color: $white;
-    border: 1px solid var(--shiftclass-border-color);
+    border: 1px solid var(--shiftclass-border-light);
     border-radius: var(--shiftclass-border-radius);
     box-shadow: var(--shiftclass-shadow);
     transition: var(--shiftclass-transition-base);
     
     &:hover {
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-        transform: translateY(-2px);
+        box-shadow: var(--shiftclass-shadow-lg);
+        transform: translateY(-3px);
+        border-color: rgba(var(--shiftclass-primary-rgb), 0.3);
+    }
+    
+    .card-header {
+        background-color: rgba(var(--shiftclass-primary-rgb), 0.03);
+        border-bottom: 1px solid var(--shiftclass-border-light);
+        font-weight: $font-weight-semibold;
+        color: var(--shiftclass-text-primary);
+    }
+    
+    .card-body {
+        color: var(--shiftclass-text-primary);
+    }
+    
+    .card-footer {
+        background-color: rgba(var(--shiftclass-background), 0.5);
+        border-top: 1px solid var(--shiftclass-border-light);
+        font-size: $font-size-base * 0.9;
+        color: var(--shiftclass-text-secondary);
     }
 }

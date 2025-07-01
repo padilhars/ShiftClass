@@ -44,11 +44,45 @@ if ($ADMIN->fulltree) {
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
-    // Brand color setting
+    // Colors section heading
+    $name = 'theme_shiftclass/colorsheading';
+    $title = get_string('colorsheading', 'theme_shiftclass');
+    $description = get_string('colorsheading_desc', 'theme_shiftclass');
+    $setting = new admin_setting_heading($name, $title, $description);
+    $page->add($setting);
+
+    // Primary color setting (Brand color)
     $name = 'theme_shiftclass/brandcolor';
     $title = get_string('brandcolor', 'theme_shiftclass');
     $description = get_string('brandcolor_desc', 'theme_shiftclass');
     $default = '#0f6cbf';
+    $setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
+    $setting->set_updatedcallback('theme_reset_all_caches');
+    $page->add($setting);
+
+    // Secondary color setting
+    $name = 'theme_shiftclass/secondarycolor';
+    $title = get_string('secondarycolor', 'theme_shiftclass');
+    $description = get_string('secondarycolor_desc', 'theme_shiftclass');
+    $default = '#6c757d';
+    $setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
+    $setting->set_updatedcallback('theme_reset_all_caches');
+    $page->add($setting);
+
+    // Accent color setting
+    $name = 'theme_shiftclass/accentcolor';
+    $title = get_string('accentcolor', 'theme_shiftclass');
+    $description = get_string('accentcolor_desc', 'theme_shiftclass');
+    $default = '#28a745';
+    $setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
+    $setting->set_updatedcallback('theme_reset_all_caches');
+    $page->add($setting);
+
+    // Background color setting
+    $name = 'theme_shiftclass/backgroundcolor';
+    $title = get_string('backgroundcolor', 'theme_shiftclass');
+    $description = get_string('backgroundcolor_desc', 'theme_shiftclass');
+    $default = '#f8f9fa';
     $setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
